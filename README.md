@@ -2,9 +2,12 @@
 
 ## Protocol
 
-Example: <- stdin, -> stdout
+矢印は入出力を示すだけで，実際に入出力する必要はない．
 
+`<- stdin`, `-> stdout`,
 stderr は無視される (見えるようにする予定)
+
+Example:
 
 ```
 <- init 1
