@@ -283,14 +283,12 @@ impl RandomPlayer {
 }
 pub fn start() -> Result<(), String> {
     use std::io::{self, BufRead};
-    use std::io::{stdout, Write};
     let mut player = RandomPlayer::new();
     let stdin = io::stdin();
     for line in stdin.lock().lines() {
         let resp = player.play(&line.unwrap());
         if let Some(resp) = resp {
             println!("{}", resp);
-            stdout().flush().unwrap();
         }
     }
     Ok(())
