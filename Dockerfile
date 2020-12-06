@@ -9,4 +9,4 @@ RUN cargo build --release
 FROM alpine:latest
 WORKDIR /work
 COPY --from=0 /work/target/release/reversi_random .
-ENTRYPOINT reversi_random
+ENTRYPOINT /work/reversi_random
