@@ -1,5 +1,8 @@
 # Reversi Random Ai
 
+# Build Docker Image
+`docker build . -t reversi-random`
+
 ## Protocol
 
 矢印は入出力を示すだけで，実際に入出力する必要はない．

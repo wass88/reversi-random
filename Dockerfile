@@ -5,4 +5,8 @@ COPY src ./src
 COPY Cargo.lock ./
 COPY Cargo.toml ./
 RUN cargo build --release
-ENTRYPOINT target/release/reversi_random
+
+FROM alpine:latest
+WORKDIR /work
+COPY --from=0 /work/target/release/reversi_random .
+ENTRYPOINT reversi_random
