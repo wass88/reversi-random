@@ -231,13 +231,13 @@ impl Input {
     }
 }
 #[derive(Debug, Clone)]
-struct RandomPlayer {
+struct MinimumPlayer {
     board: Option<Reversi>,
     first: bool,
 }
-impl RandomPlayer {
-    fn new() -> RandomPlayer {
-        RandomPlayer {
+impl MinimumPlayer {
+    fn new() -> MinimumPlayer {
+        MinimumPlayer {
             board: None,
             first: false,
         }
@@ -266,10 +266,31 @@ impl RandomPlayer {
             }
             Input::Res(_) => None,
             Input::Wait => {
-                use rand::seq::SliceRandom;
                 use rand::thread_rng;
+                use rand::seq::SliceRandom;
                 let b = self.board.as_mut().unwrap();
-                let p = b.playable();
+                let mut p = b.playable();
+                if p.len() >= 2 {
+                    let mut min_rev = 64;
+                    let mut res = vec![];
+                    for i in 0..p.len() {
+                        match p[i] {
+                            Action::Put(y, x) => {
+                                let r:usize = b.reversal(y, x).iter().sum();
+                                if r < min_rev {
+                                    min_rev = r;
+                                    res = vec![];
+                                }
+                                if r == min_rev {
+                                    res.push(p[i]);
+                                }
+                            }
+                            _=>{}
+                        }
+                        
+                    }
+                    p = res;
+                }
                 let mut rng = thread_rng();
                 let a = p.choose(&mut rng).unwrap();
                 b.act(*a).unwrap();
@@ -283,7 +304,7 @@ impl RandomPlayer {
 }
 pub fn start() -> Result<(), String> {
     use std::io::{self, BufRead};
-    let mut player = RandomPlayer::new();
+    let mut player = MinimumPlayer::new();
     let stdin = io::stdin();
     for line in stdin.lock().lines() {
         let resp = player.play(&line.unwrap());
@@ -326,8 +347,8 @@ mod tests {
     }
     #[test]
     fn test_player() {
-        let mut p0 = RandomPlayer::new();
-        let mut p1 = RandomPlayer::new();
+        let mut p0 = MinimumPlayer::new();
+        let mut p1 = MinimumPlayer::new();
         p0.play("init 0");
         p1.play("init 1");
         for _ in 0..100 {
