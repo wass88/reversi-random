@@ -1,4 +1,4 @@
-FROM rust:1.48
+FROM rust:1.48-slim-buster as build
 RUN mkdir /work
 WORKDIR /work
 COPY src ./src
@@ -6,7 +6,9 @@ COPY Cargo.lock ./
 COPY Cargo.toml ./
 RUN cargo build --release
 
-FROM alpine:latest
+FROM debian:10.6-slim
 WORKDIR /work
-COPY --from=0 /work/target/release/reversi_random .
+COPY --from=build /work/target/release/reversi_random .
 ENTRYPOINT /work/reversi_random
+
+# rust:alpine is not suitable for arm
