@@ -1,4 +1,4 @@
-FROM rust:1.45.2-alpine3.11
+FROM rust:1.48
 RUN mkdir /work
 WORKDIR /work
 COPY src ./src
