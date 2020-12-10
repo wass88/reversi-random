@@ -177,6 +177,13 @@ impl Reversi {
             f - s
         }
     }
+    fn pieces(&self) -> usize {
+        self.board.iter().map(|row|
+            row.iter().map(|p|
+                if p == Piece::Empty { 0 } else { 1 }
+            }.sum()
+        }.sum()
+    }
 }
 use std::fmt;
 impl fmt::Display for Reversi {
@@ -271,17 +278,18 @@ impl MinimumPlayer {
                 let b = self.board.as_mut().unwrap();
                 let mut p = b.playable();
                 if p.len() >= 2 {
-                    let mut max_rev = 0;
+                    let is_min = b.pieces() < 8*6;
+                    let mut rev = if is_min { 64 } else { 0 };
                     let mut res = vec![];
                     for i in 0..p.len() {
                         match p[i] {
                             Action::Put(y, x) => {
                                 let r:usize = b.reversal(y, x).iter().sum();
-                                if r > max_rev {
-                                    max_rev = r;
+                                if (is_min && r > rev) || (!is_min && r < rev) {
+                                    rev = r;
                                     res = vec![];
                                 }
-                                if r == max_rev {
+                                if r == rev {
                                     res.push(p[i]);
                                 }
                             }
