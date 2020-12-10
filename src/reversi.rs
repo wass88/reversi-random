@@ -271,17 +271,17 @@ impl MinimumPlayer {
                 let b = self.board.as_mut().unwrap();
                 let mut p = b.playable();
                 if p.len() >= 2 {
-                    let mut min_rev = 64;
+                    let mut max_rev = 0;
                     let mut res = vec![];
                     for i in 0..p.len() {
                         match p[i] {
                             Action::Put(y, x) => {
                                 let r:usize = b.reversal(y, x).iter().sum();
-                                if r < min_rev {
-                                    min_rev = r;
+                                if r > max_rev {
+                                    max_rev = r;
                                     res = vec![];
                                 }
-                                if r == min_rev {
+                                if r == max_rev {
                                     res.push(p[i]);
                                 }
                             }
