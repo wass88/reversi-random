@@ -285,7 +285,7 @@ impl MinimumPlayer {
                         match p[i] {
                             Action::Put(y, x) => {
                                 let r:usize = b.reversal(y, x).iter().sum();
-                                if (is_min && r > rev) || (!is_min && r < rev) {
+                                if (is_min && r < rev) || (!is_min && r > rev) {
                                     rev = r;
                                     res = vec![];
                                 }
