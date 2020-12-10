@@ -178,11 +178,11 @@ impl Reversi {
         }
     }
     fn pieces(&self) -> usize {
-        self.board.iter().map(|row|
+        self.board.iter().map::<usize,_>(|row|
             row.iter().map(|p|
-                if p == Piece::Empty { 0 } else { 1 }
-            }.sum()
-        }.sum()
+                if p == &Piece::Empty { 0 } else { 1 }
+            ).sum()
+        ).sum()
     }
 }
 use std::fmt;
